@@ -1,0 +1,96 @@
+.page-slot {
+    margin-top: 10%;
+    height: 90%;
+    width: 100%;
+}
+
+.ticker-slot {
+    display: flex;
+    align-items: center;
+    gap: 2%;
+}
+
+#add-ticker-form {
+    position: relative;
+    width: 30%;
+    left: 5%;
+}
+
+.ticker-info {
+    position: relative;
+    font-size: small;
+    align-self: center;
+    width: 20%;
+}
+
+.add-btn {
+    border-style: none;
+    border-radius: 12px;
+    width: 20%;
+}
+
+#qm {
+    background-color: #d3d6d7;
+    border-radius: 50%;
+    margin-left: 2%;
+}
+
+#qm:hover {
+    background-color: #f4f467;
+    cursor: pointer;
+}
+
+.add-btn:hover {
+    background-color: rgb(78, 225, 78);
+}
+
+.box-slot {
+    position: relative;
+    margin-top: 10%;
+    left: 5%;
+    right: 5%;
+    height: 100%;
+    width: 80%;
+    background-color: gainsboro;
+}
+
+.slot-header {
+    position: relative;
+    height: 10%;
+}
+
+.slot1 {
+    position: relative;
+}
+
+
+.YoYchart, .dividends, .volumes {
+    position: relative;
+    width: 95%;
+    margin-top: 5px;
+    left: 15px;
+}
+
+.bk-Figure {
+    padding: 15px 15px 15px 15px;
+}
+
+hr.dotted {
+    border-top: 3px dotted #bbb;
+}
+
+#separator1 {
+    display: none;
+}
+
+#separator2 {
+    display: none;
+}
+
+#separator3 {
+    display: none;
+}
+
+#separator4 {
+    display: none;
+}

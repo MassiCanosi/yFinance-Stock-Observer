@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+
+    <title>Stock Observer Landing Page HTML Template</title>
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" type="text/css" href="static/index_assets/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="static/index_assets/css/templatemo-lava.css">
+    <link rel="stylesheet" type="text/css" href="static/carousel_assets/css/carousel.css">
+
+    <!-- General scripts -->
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-3.6.0.min.js"></script>
+
+
+</head>
+
+<body>
+
+        <!-- Alert -->
+        <div class="fixedAlert">
+            &#9888;&#65039; Please note that this app is for educational purposes only and should not be relied upon for making investment decisions. 
+            Always conduct your own research before investing.&#9888;&#65039;
+        </div>
+
+        <!-- ***** Header Area Start ***** -->
+        <header class="header-area header-sticky">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <nav class="main-nav">
+                            <!-- ***** Logo Start ***** -->
+                            <a href="index.html" class="logo">
+                                Stock Observer
+                            </a>
+                            <!-- ***** Logo End ***** -->
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main>
+        <div class="page-slot">
+
+            <!-- Search Bar for Tickers -->
+            <div class="ticker-slot ">
+                <form id="add-ticker-form"> 
+                    <input type="text" id="new-ticker" placeholder="Add Ticker" required>
+                    <button class="add-btn" type="submit">Add</button>
+                </form>
+
+                <div class="ticker-info">
+                    <a href="https://stockanalysis.com/stocks/">
+                        <box-icon name="question-mark" id="qm" ></box-icon>
+                    </a>
+                    What’s a Stock Ticker?
+                </div>
+
+            </div>
+
+            <div id='YoYchart' class='YoYchart'></div>
+            <hr class="dotted" id="separator1">
+            <div id='dividends' class='dividends'></div>
+            <hr class="dotted" id="separator2">            
+            <div id='volumes' class='volumes'></div>
+            <hr class="dotted" id="separator3">
+            <div id='openprice' class='openprice'></div>
+            <hr class="dotted" id="separator4">
+
+        </div>
+    </main>
+
+    <!-- SCRIPTS -->
+    <script>
+        async function sendData(user_value) {
+            const response = await fetch("/getStockData", {
+                method: "POST",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({'ticker': user_value})
+            });
+
+            const graphs = await response.json();
+
+            if (response.ok && graphs.success) {
+
+                Plotly.newPlot('YoYchart', graphs.YoY_JSON_data, graphs.YoY_JSON_layout);
+                Plotly.newPlot('dividends', graphs.dividends_data, graphs.dividends_layout );
+                Plotly.newPlot('volumes', graphs.volumes_data, graphs.volumes_layout);
+                item = JSON.parse(graphs.Open_Price_against_Date_JSON_data);
+                Bokeh.embed.embed_item(item);
+                
+                const separator = document.getElementById("separator1")
+                separator.style.display = "block";
+                const separator2 = document.getElementById("separator2")
+                separator2.style.display = "block";
+                const separator3 = document.getElementById("separator3")
+                separator3.style.display = "block";
+                const separator4 = document.getElementById("separator4")
+                separator4.style.display = "block";
+
+            } else {
+                console.error('Error fetching data');
+            }
+        }
+
+        document.getElementById('add-ticker-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const user_value = document.getElementById('new-ticker').value;
+            await sendData(user_value);
+        });
+    </script>
+</body>
+</html>
