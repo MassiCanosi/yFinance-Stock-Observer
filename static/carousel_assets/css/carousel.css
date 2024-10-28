@@ -4,15 +4,24 @@
     width: 100%;
 }
 
+/* Nav Bar */
+
 .ticker-slot {
-    display: flex;
-    align-items: center;
-    gap: 2%;
+    border-collapse: collapse;
+    background-color: #c3d2ff8e;
+    border-radius: 12px;
+    width: 98%;
+    margin-left: 1%;
 }
+
+.cell-content {
+    padding: 4%; /* Apply padding within each cell */
+    font-size: small;
+}
+
 
 #add-ticker-form {
     position: relative;
-    width: 30%;
     left: 5%;
 }
 
@@ -20,29 +29,27 @@
     position: relative;
     font-size: small;
     align-self: center;
-    width: 20%;
 }
 
 .add-btn {
     border-style: none;
     border-radius: 12px;
-    width: 20%;
-}
-
-#qm {
-    background-color: #d3d6d7;
-    border-radius: 50%;
-    margin-left: 2%;
-}
-
-#qm:hover {
-    background-color: #f4f467;
-    cursor: pointer;
 }
 
 .add-btn:hover {
-    background-color: rgb(78, 225, 78);
+    background-color: #4169E1;
 }
+
+.go2MainBtn:hover {
+    cursor: pointer;
+}
+
+
+.go2MainBtnText:hover {
+    color: #4169E1;
+}
+
+/* Page Content */
 
 .box-slot {
     position: relative;
@@ -64,7 +71,7 @@
 }
 
 
-.YoYchart, .dividends, .volumes {
+.openprice, .YoYchart, .dividends, .volumes {
     position: relative;
     width: 95%;
     margin-top: 5px;
@@ -91,6 +98,55 @@ hr.dotted {
     display: none;
 }
 
-#separator4 {
+.loaderSlot {
     display: none;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 10%;
+    margin-left: 46%;
+}
+
+.loader {
+    display: grid;
+    position: relative;
+    width: 80px;
+    aspect-ratio: 1;
+} 
+
+.loader::before,
+.loader::after {    
+    content:"";
+    grid-area: 1/1;
+    --c:no-repeat radial-gradient(farthest-side,#25b09b 92%,#0000);
+    background: 
+        var(--c) 50%  0, 
+        var(--c) 50%  100%, 
+        var(--c) 100% 50%, 
+        var(--c) 0    50%;
+    background-size: 12px 12px;
+    animation: l12 1s infinite;
+}
+.loader::before {
+    margin: 4px;
+    filter: hue-rotate(45deg);
+    background-size: 8px 8px;
+    animation-timing-function: linear
+}
+
+@keyframes l12 { 
+    100%{transform: rotate(.5turn)}
+}
+
+.loadingText {
+    position: relative;
+    margin-top: 3.5%;
+}
+
+
+.dividends {
+    font-size: medium;
+}
+
+.openprice {
+    padding-bottom: 3%;
 }

@@ -9,22 +9,25 @@ import os
 from config import Config
 from utils.render_plotly_chart import render_plotly_chart
 from bokeh import embed
+from utils.DataElaboration import extract_stock_data
 
-from utils.DataElaboration import extract_stock_data 
 # !!! 
 #   extract_stock_data(company, stock_name) 
 #   return share_price_data, Open_Price_against_Date, dividends_df, Dividends, YoY_deltaViz, traded_volumes
 # !!!
 
 
+
+
+### TODO: FIXA GLI ERRORI SE INSERIMENTO TICKER SBAGLIATO (REF: SWAL FIRE)
+
+
 ###################/// APP CONFIG ///####################
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 
-
 app.config.from_object(Config)  # Load the configuration
 KEY_TOKEN = app.config['SECRET_KEY']
-
 
 Compress(app)
 
@@ -32,7 +35,7 @@ cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
 @app.route('/')
 def landingpage():
-    return render_template('index.html')
+    return render_template('index.html', title="Home Page")
 
 @app.route('/getStockData', methods=['POST', 'GET'])
 def getStockData():
@@ -44,17 +47,33 @@ def getStockData():
 
         share_price_data, Open_Price_against_Date, dividends_df, Dividends, YoY_deltaViz, traded_volumes = extract_stock_data(stock_name)
 
-        Open_Price_against_Date_JSON = json.dumps(embed.json_item(Open_Price_against_Date, "openprice"))
-        YoY_JSON_data, YoY_JSON_layout = render_plotly_chart(YoY_deltaViz)
-        dividends_data, dividends_layout = render_plotly_chart(Dividends)
-        volumes_data, volumes_layout = render_plotly_chart(traded_volumes)
+        if isinstance(Dividends, str):
 
-        return jsonify(success=True, message="Data processed successfully!",
-                        Open_Price_against_Date_JSON_data = Open_Price_against_Date_JSON,
-                        YoY_JSON_data=YoY_JSON_data, YoY_JSON_layout=YoY_JSON_layout,
-                        dividends_data = dividends_data, dividends_layout = dividends_layout,
-                        volumes_data = volumes_data, volumes_layout = volumes_layout
-                    )
+            Open_Price_against_Date_data, Open_Price_against_Date_layout  = render_plotly_chart(Open_Price_against_Date)
+            YoY_JSON_data, YoY_JSON_layout = render_plotly_chart(YoY_deltaViz)
+            dividends_data = Dividends
+            volumes_data, volumes_layout = render_plotly_chart(traded_volumes)
+
+            return jsonify(success=True, message="Data processed successfully!",
+                            Open_Price_against_Date_data = Open_Price_against_Date_data, Open_Price_against_Date_layout = Open_Price_against_Date_layout,
+                            YoY_JSON_data= YoY_JSON_data, YoY_JSON_layout= YoY_JSON_layout,
+                            dividends_data = dividends_data,
+                            volumes_data = volumes_data, volumes_layout = volumes_layout
+                        )
+
+        else:
+
+            Open_Price_against_Date_data, Open_Price_against_Date_layout  = render_plotly_chart(Open_Price_against_Date)
+            YoY_JSON_data, YoY_JSON_layout = render_plotly_chart(YoY_deltaViz)
+            dividends_data, dividends_layout = render_plotly_chart(Dividends)
+            volumes_data, volumes_layout = render_plotly_chart(traded_volumes)
+
+            return jsonify(success=True, message="Data processed successfully!",
+                            Open_Price_against_Date_data = Open_Price_against_Date_data, Open_Price_against_Date_layout = Open_Price_against_Date_layout,
+                            YoY_JSON_data=YoY_JSON_data, YoY_JSON_layout=YoY_JSON_layout,
+                            dividends_data = dividends_data, dividends_layout = dividends_layout,
+                            volumes_data = volumes_data, volumes_layout = volumes_layout
+                        )
     
     except Exception as e:
             app.logger.info(f"Errore: {e}")
@@ -65,6 +84,12 @@ def getStockData():
 def explorepage():
 
     return render_template('explore.html', title="Historic Data")
+
+
+
+@app.route('/news')
+def newspage():
+    return render_template('news.html', title="News")
 
 
 

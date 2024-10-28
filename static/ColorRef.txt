@@ -1,0 +1,2 @@
+RoyalBlue: #000080
+BabyBlue: #4169E1

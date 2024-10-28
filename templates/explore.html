@@ -14,14 +14,15 @@
     <link rel="stylesheet" type="text/css" href="static/index_assets/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="static/index_assets/css/templatemo-lava.css">
     <link rel="stylesheet" type="text/css" href="static/carousel_assets/css/carousel.css">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 
     <!-- General scripts -->
-    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-3.6.0.min.js"></script>
 
 
 </head>
+
 
 <body>
 
@@ -38,7 +39,7 @@
                     <div class="col-12">
                         <nav class="main-nav">
                             <!-- ***** Logo Start ***** -->
-                            <a href="index.html" class="logo">
+                            <a href="/" class="logo">
                                 Stock Observer
                             </a>
                             <!-- ***** Logo End ***** -->
@@ -52,29 +53,62 @@
         <div class="page-slot">
 
             <!-- Search Bar for Tickers -->
-            <div class="ticker-slot ">
-                <form id="add-ticker-form"> 
-                    <input type="text" id="new-ticker" placeholder="Add Ticker" required>
-                    <button class="add-btn" type="submit">Add</button>
-                </form>
+            <table class="ticker-slot">
+                <tr>
 
-                <div class="ticker-info">
-                    <a href="https://stockanalysis.com/stocks/">
-                        <box-icon name="question-mark" id="qm" ></box-icon>
-                    </a>
-                    What’s a Stock Ticker?
+                    <td id="add-ticker-form"> 
+                        <div class="cell-content">
+                            
+                            <input type="text" id="new-ticker" placeholder="Add Ticker" required list="ticker-suggestions">
+                            <datalist id="ticker-suggestions">
+                                <option value="AAPL">Apple Inc.</option>
+                                <option value="GOOGL">Alphabet Inc. (Google)</option>
+                                <option value="MSFT">Microsoft Corporation</option>
+                                <option value="AMZN">Amazon.com, Inc.</option>
+                                <option value="TSLA">Tesla, Inc.</option>
+                                <!-- Add more ticker suggestions as needed -->
+                            </datalist>
+
+                            <button class="add-btn" id="add-btn">Add</button>
+                        </div>
+                    </td>
+
+                    <td class="ticker-info">
+                        <div class="cell-content">
+                        <a href="https://stockanalysis.com/stocks/" target="_blank">
+                            <i class="bx bx-question-mark bx-sm bx-border"></i>
+                        </a>
+                        What’s a Stock Ticker?
+                        </div>
+                    </td>
+
+                    <td class="go2MainBtn">
+                        <div class="cell-content">
+                            <a href="{{ url_for('landingpage')}}">
+                                <i class='bx bx-home bx-sm bx-border'></i>
+                            </a>
+                            Return to Main Menu
+                        </div>
+                    </td>
+
+                </tr>
+            </table>
+
+            <section>
+                <div id='openprice' class='openprice'></div>
+                <hr class="dotted" id="separator1">
+                <div id='YoYchart' class='YoYchart'></div>
+                <hr class="dotted" id="separator2">     
+                <div id='volumes' class='volumes'></div>
+                <hr class="dotted" id="separator3">   
+                <div id='dividends' class='dividends'></div>    
+
+                <div class="loaderSlot" id="loaderSlot">
+                    <div class="loader" id="loader"> </div>
+                    <div class="loadingText"> Loading... </div>
                 </div>
 
-            </div>
-
-            <div id='YoYchart' class='YoYchart'></div>
-            <hr class="dotted" id="separator1">
-            <div id='dividends' class='dividends'></div>
-            <hr class="dotted" id="separator2">            
-            <div id='volumes' class='volumes'></div>
-            <hr class="dotted" id="separator3">
-            <div id='openprice' class='openprice'></div>
-            <hr class="dotted" id="separator4">
+            </section>
 
         </div>
     </main>
@@ -82,6 +116,19 @@
     <!-- SCRIPTS -->
     <script>
         async function sendData(user_value) {
+
+            hideSeparators();
+
+            // Clear previous plots if they exist
+            Plotly.purge('openprice');
+            Plotly.purge('YoYchart');
+            Plotly.purge('volumes');
+            Plotly.purge('dividends');
+            
+            // Remove the Bokeh plot by clearing the inner HTML of the openprice div
+            const openPriceDiv = document.getElementById('openprice');
+            openPriceDiv.innerHTML = '';
+
             const response = await fetch("/getStockData", {
                 method: "POST",
                 headers: {'Content-Type': 'application/json'},
@@ -92,31 +139,61 @@
 
             if (response.ok && graphs.success) {
 
+                const loader = document.getElementById('loaderSlot');
+                loader.style.display = 'none';
+
+                Plotly.newPlot('openprice', graphs.Open_Price_against_Date_data, graphs.Open_Price_against_Date_layout);
                 Plotly.newPlot('YoYchart', graphs.YoY_JSON_data, graphs.YoY_JSON_layout);
-                Plotly.newPlot('dividends', graphs.dividends_data, graphs.dividends_layout );
+
+                console.log(typeof graphs.dividends_data)
+
+                if (typeof graphs.dividends_data == 'string'|| graphs.dividends_data instanceof String) {
+                    const dividend_str = document.getElementById("dividends");
+                    dividend_str.innerHTML = graphs.dividends_data;
+                } else {
+                    Plotly.newPlot('dividends', graphs.dividends_data, graphs.dividends_layout );
+                }
+
                 Plotly.newPlot('volumes', graphs.volumes_data, graphs.volumes_layout);
-                item = JSON.parse(graphs.Open_Price_against_Date_JSON_data);
-                Bokeh.embed.embed_item(item);
+
                 
-                const separator = document.getElementById("separator1")
-                separator.style.display = "block";
-                const separator2 = document.getElementById("separator2")
-                separator2.style.display = "block";
-                const separator3 = document.getElementById("separator3")
-                separator3.style.display = "block";
-                const separator4 = document.getElementById("separator4")
-                separator4.style.display = "block";
+                showSeparators();
 
             } else {
                 console.error('Error fetching data');
             }
         }
 
-        document.getElementById('add-ticker-form').addEventListener('submit', async function(event) {
-            event.preventDefault();
+        document.getElementById('add-btn').addEventListener('click', async function(event) {
+            // event.preventDefault();
+
+            const loader = document.getElementById('loaderSlot');
+            loader.style.display = 'flex';
+
             const user_value = document.getElementById('new-ticker').value;
             await sendData(user_value);
         });
     </script>
+
+    <script>
+        function showSeparators() {
+            const separator = document.getElementById("separator1")
+                separator.style.display = "block";
+                const separator2 = document.getElementById("separator2")
+                separator2.style.display = "block";
+                const separator3 = document.getElementById("separator3")
+                separator3.style.display = "block";
+        }
+
+        function hideSeparators() {
+            const separator = document.getElementById("separator1")
+                separator.style.display = "none";
+                const separator2 = document.getElementById("separator2")
+                separator2.style.display = "none";
+                const separator3 = document.getElementById("separator3")
+                separator3.style.display = "none";
+        }
+    </script>
+
 </body>
 </html>
