@@ -10,6 +10,7 @@ from config import Config
 from utils.render_plotly_chart import render_plotly_chart
 from bokeh import embed
 from utils.DataElaboration import extract_stock_data
+from utils.News_scraper import get_news
 
 # !!! 
 #   extract_stock_data(company, stock_name) 
@@ -20,6 +21,9 @@ from utils.DataElaboration import extract_stock_data
 
 
 ### TODO: FIXA GLI ERRORI SE INSERIMENTO TICKER SBAGLIATO (REF: SWAL FIRE)
+### TODO: NELLA HOME PAGE ALLA VOCE DROP DOWN LINKA WP NEWS A "BLOG"
+### TODO: FIXA IMMAGINI NELLA PAGINA DI NEWS
+
 
 
 ###################/// APP CONFIG ///####################
@@ -33,6 +37,8 @@ Compress(app)
 
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
+
+###################/// APP ROUTES ///####################
 @app.route('/')
 def landingpage():
     return render_template('index.html', title="Home Page")
@@ -85,12 +91,22 @@ def explorepage():
 
     return render_template('explore.html', title="Historic Data")
 
+@app.route('/getStockNews', methods=['POST', 'GET'])
+def getStockNews():
+    stock_name = request.json.get('ticker')
+    stock_name_upper = stock_name.upper()
+    app.logger.info(f"/getStockNews: {stock_name_upper}")
+
+    data = get_news(stock_name_upper)
+
+    data_len = len(data)
+
+    return jsonify(success=True, message="Data processed successfully!", data = data, data_len = data_len)
 
 
 @app.route('/news')
 def newspage():
     return render_template('news.html', title="News")
-
 
 
 if __name__ == '__main__':
