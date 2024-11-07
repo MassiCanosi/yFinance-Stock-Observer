@@ -19,6 +19,7 @@
     <!-- General scripts -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 </head>
@@ -161,6 +162,16 @@
 
             } else {
                 console.error('Error fetching data');
+                Swal.fire({
+                    title: 'Oops!',
+                    text: "The company/ticker doesn't exist. Please retry.",
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                })
+                .then(function(){
+                    location.reload();
+                    }
+                );
             }
         }
 

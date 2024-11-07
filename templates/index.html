@@ -43,16 +43,15 @@
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav">
                             <li class="scroll-to-section"><a href="#welcome" class="menu-item">Home</a></li>
-                            <li class="scroll-to-section"><a href="#about" class="menu-item">About</a></li>
+                            <li class="scroll-to-section"><a href="#about" class="menu-item">Features</a></li>
                             <li class="scroll-to-section"><a href="#testimonials" class="menu-item">Author</a>
                             </li>
                             <li class="submenu">
-                                <a href="javascript:;">Drop Down</a>
+                                <a href="javascript:;">About me</a>
                                 <ul>
-                                    <li><a href="" class="menu-item">About Us</a></li>
-                                    <li><a href="" class="menu-item">Features</a></li>
-                                    <li><a href="" class="menu-item">FAQ's</a></li>
-                                    <li><a href="" class="menu-item">Blog</a></li>
+                                    <li><a href="https://massicanosi.github.io/" target="_blank">Personal Website</a></li>
+                                    <li><a href="https://github.com/MassiCanosi" target="_blank">My Github</a></li>
+                                    <li><a href="{{ url_for('newspage') }}">Stock News</a></li>
                                 </ul>
                             </li>
                             <li class="scroll-to-section"><a href="#contact-us" class="menu-item">Contact Us</a></li>
@@ -118,9 +117,9 @@
                         <div class="features-icon">
                             <h2>02</h2>
                             <img src="static/index_assets/images/features-icon-2.png" alt="">
-                            <h4>Market Trends</h4>
-                            <p>Stay updated with real-time market trends to spot opportunities and risks.</p>
-                            <a href="#testimonials" class="main-button">
+                            <h4>Sustainability and Risks</h4>
+                            <p>Real-time insights on risks, key stakeholders and expert recommendations.</p>                            
+                            <a href="{{ url_for('deepdive') }}" class="main-button">
                                 Discover More
                             </a>
                         </div>

@@ -26,8 +26,6 @@ def extract_stock_data(stock_name):
     ''' 
     Extract insights relative to a specific stock.
 
-    :param filename: JSON file to load
-    :param company: Company to be analyzed
     :param stockname: ticker symbol
     
     :return: graphs and stats related to the specific stock
@@ -41,7 +39,7 @@ def extract_stock_data(stock_name):
     share_price_data = share_price_data.reset_index()
     share_price_data['Date'] = pd.to_datetime(share_price_data['Date'])
 
-    Open_Price_against_Date = candlesticks_chart(share_price_data)
+    Open_Price_against_Date = candlesticks_chart(share_price_data, company_name)
 
     dividends_df = pd.DataFrame(ticker.dividends).reset_index()
 

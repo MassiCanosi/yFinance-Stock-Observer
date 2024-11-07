@@ -19,10 +19,7 @@ from utils.News_scraper import get_news
 
 
 
-
 ### TODO: FIXA GLI ERRORI SE INSERIMENTO TICKER SBAGLIATO (REF: SWAL FIRE)
-### TODO: NELLA HOME PAGE ALLA VOCE DROP DOWN LINKA WP NEWS A "BLOG"
-### TODO: FIXA IMMAGINI NELLA PAGINA DI NEWS
 
 
 
@@ -107,6 +104,16 @@ def getStockNews():
 @app.route('/news')
 def newspage():
     return render_template('news.html', title="News")
+
+
+@app.route('/deepdive')
+def deepdive():
+    return render_template('deepdive.html')
+
+
+@app.route('/risktables')
+def risktables():
+    return render_template('esgtables.html')
 
 
 if __name__ == '__main__':

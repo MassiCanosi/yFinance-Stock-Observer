@@ -10,6 +10,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
     <link href="static/news_assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="static/news_assets/css/templatemo-xtra-blog.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
 
     <!-- General Scripts -->
     <script src="static/news_assets/js/jquery.min.js"></script>
@@ -25,57 +26,44 @@
                 <i class="fas fa-bars"></i>
             </button>
             <div class="tm-site-header">
-                <div class="mb-3 mx-auto tm-site-logo"><i class="fas fa-times fa-2x"></i></div>            
+                <div class="mb-3 mx-auto tm-site-logo"><i class="bx bx-dollar bx-md"></i></div>            
                 <h1 class="text-center">Stock Observer News</h1>
                 <h2 class="pwrd"> Powered by Yahoo Finance </h2>
             </div>
             <p class="tm-mb-80 pr-5 text-white" id="descText">
-                Stay updated with the latest news and analysis from the stock market. Our news web scraper provides comprehensive coverage of stock performance, market trends, and significant financial events.</div>
-    </header>
-    <div class="container-fluid">
-        <main class="tm-main">
-            <!-- Search form -->
-            <div class="row tm-row">
-                <div class="col-12">
-                        <input class="form-control tm-search-input" name="query" type="text" placeholder="Insert Stock Ticker..." id="searchBar">
-                        <button class="tm-search-button" id="searchBtn">
-                            <i class="fas fa-search tm-search-icon" aria-hidden="true"></i>
-                        </button>                                
-                </div>                
-            </div>      
-            
-            
-            <!-- Post -->
-            <div class="row tm-row" id="mainSlotInfo">
-
+                Stay updated with the latest news and analysis from the stock market. Our news web scraper provides comprehensive coverage of stock performance, market trends, and significant financial events.
+        </div>
+        <!-- Back Button -->
+        <a href="{{ url_for('landingpage') }}">
+            <div class="textSlotBackBtn">
+                <i class="bx bx-arrow-from-right bx-sm"></i>
+                Go Back
             </div>
-            <!-- <div class="row tm-row tm-mt-100 tm-mb-75">
-                <div class="tm-prev-next-wrapper">
-                    <a href="#" class="mb-2 tm-btn tm-btn-primary tm-prev-next disabled tm-mr-20">Prev</a>
-                    <a href="#" class="mb-2 tm-btn tm-btn-primary tm-prev-next">Next</a>
-                </div>
-                <div class="tm-paging-wrapper">
-                    <span class="d-inline-block mr-3">Page</span>
-                    <nav class="tm-paging-nav d-inline-block">
-                        <ul>
-                            <li class="tm-paging-item active">
-                                <a href="#" class="mb-2 tm-btn tm-paging-link">1</a>
-                            </li>
-                            <li class="tm-paging-item">
-                                <a href="#" class="mb-2 tm-btn tm-paging-link">2</a>
-                            </li>
-                            <li class="tm-paging-item">
-                                <a href="#" class="mb-2 tm-btn tm-paging-link">3</a>
-                            </li>
-                            <li class="tm-paging-item">
-                                <a href="#" class="mb-2 tm-btn tm-paging-link">4</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>                 -->
-            </div>            
-        </main>
-    </div>
+        </a>
+    </header>
+
+    <!-- Main -->
+    <main class="tm-main">
+        <!-- Search form -->
+            <div class="searchSlot">
+                <input class="form-control tm-search-input" name="query" type="text" placeholder="Insert Stock Ticker..." id="searchBar" required list="ticker-suggestions">
+                <datalist id="ticker-suggestions">
+                    <option value="AAPL">Apple Inc.</option>
+                    <option value="GOOGL">Alphabet Inc. (Google)</option>
+                    <option value="MSFT">Microsoft Corporation</option>
+                    <option value="AMZN">Amazon.com, Inc.</option>
+                    <option value="TSLA">Tesla, Inc.</option>
+                    <!-- Add more ticker suggestions as needed -->
+                </datalist>
+                <button class="tm-search-button" id="searchBtn">
+                    <i class="fas fa-search tm-search-icon" aria-hidden="true"></i>
+                </button>                                
+            </div>
+        
+        <!-- Posts -->
+        <div class="row tm-row" id="mainSlotInfo"></div>
+
+    </main>
 
 
     <script>
@@ -95,7 +83,6 @@
 
                 console.log(infodata.data[i].thumbnail)
                 createNewsSlots(infodata.data[i].link, infodata.data[i].title, infodata.data[i].publisher, infodata.data[i].thumbnail, infodata.data[i].type);
-
                 }
             }
         };
@@ -103,63 +90,66 @@
         document.getElementById("searchBtn").addEventListener("click", async function() {
 
             const user_info_value = document.getElementById("searchBar").value;
-            
+            await clearPage();
             await tickerNews(user_info_value);
         });
     </script>
 
     <script>
+        async function clearPage() {
+            // CLEAR PREVIOUS IF PRESENT
+            document.getElementById("mainSlotInfo").innerHTML = "";
+        }
         async function createNewsSlots(href, innerText, publisher, thumbnail, newstype) {
 
-                const mainSlot = document.getElementById("mainSlotInfo")
+                const mainSlot = document.getElementById("mainSlotInfo");
 
                 //BUILD
-                const articleSlot = document.createElement('article')
-                const horizontalRule = document.createElement('hr')
-                const reference = document.createElement('a')
-                const imageSlot = document.createElement('div')
-                const image = document.createElement('img')
-                const badge = document.createElement('span')
-                const sepLine = document.createElement('h2')
-                const newsText = document.createElement('p')
-                const newsTypeSlot = document.createElement('div')
-                const horizontalRule2 = document.createElement('hr')
-                const publisherSlot = document.createElement('div')
-                const publ = document.createElement('span')
+                const articleSlot = document.createElement('article');
+                const horizontalRule = document.createElement('hr');
+                const reference = document.createElement('a');
+                const imageSlot = document.createElement('div');
+                const image = document.createElement('img');
+                const badge = document.createElement('span');
+                const sepLine = document.createElement('h2');
+                const newsText = document.createElement('p');
+                const newsTypeSlot = document.createElement('div');
+                const horizontalRule2 = document.createElement('hr');
+                const publisherSlot = document.createElement('div');
+                const publ = document.createElement('span');
 
                 //CREATE
-                articleSlot.setAttribute('class', 'col-12 col-md-6 tm-post')
-                horizontalRule.setAttribute('class', 'tm-hr-primary')
-                reference.setAttribute('class', 'effect-lily tm-post-link tm-pt-60')
-                reference.setAttribute('href', href)
-                imageSlot.setAttribute('class', 'tm-post-link-inner')
-                // image.setAttribute('class', 'img-resize')
-                image.setAttribute('alt', 'Image')
-                image.src = thumbnail
-                image.width = 200; 
-                image.height = 150;
-                badge.setAttribute('class', 'position-absolute tm-new-badge')
-                badge.innerText = newstype
-                sepLine.setAttribute('class', 'tm-pt-30 tm-color-primary tm-post-title')
-                newsText.setAttribute('class', 'tm-pt-30')
-                newsText.innerText = innerText
-                publisherSlot.setAttribute('class', 'd-flex justify-content-between')
-                publ.innerText = publisher
+                articleSlot.setAttribute('class', 'col-12  col-md-6 tm-post');
+                horizontalRule.setAttribute('class', 'tm-hr-primary');
+                reference.setAttribute('class', 'effect-lily tm-post-link tm-pt-60');
+                reference.setAttribute('href', href);
+                reference.setAttribute('target', '_blank');
+                imageSlot.setAttribute('class', 'tm-post-link-inner');
+                image.setAttribute('alt', 'Image');
+                image.src = thumbnail;
+                image.width = 200; ;
+                image.height = 150;;
+                badge.setAttribute('class', 'position-absolute tm-new-badge');
+                badge.innerText = newstype;
+                sepLine.setAttribute('class', 'tm-pt-30 tm-color-primary tm-post-title');
+                newsText.setAttribute('class', 'tm-pt-30');
+                newsText.innerText = innerText;
+                publisherSlot.setAttribute('class', 'd-flex justify-content-between');
+                publ.innerText = `Source: ${publisher}`;
                 
                 //PLACE
-                mainSlot.appendChild(articleSlot)
-                articleSlot.appendChild(horizontalRule)
-                articleSlot.appendChild(reference)
-                reference.appendChild(imageSlot)
-                imageSlot.appendChild(image)
-                reference.appendChild(badge)
-                reference.appendChild(image)
-                reference.appendChild(sepLine)
-                articleSlot.appendChild(newsText)
-                articleSlot.appendChild(newsTypeSlot)
-                articleSlot.appendChild(horizontalRule2)
-                articleSlot.appendChild(publisherSlot)
-                publisherSlot.appendChild(publ)
+                mainSlot.appendChild(articleSlot);
+                articleSlot.appendChild(horizontalRule);
+                articleSlot.appendChild(reference);
+                reference.appendChild(imageSlot);
+                imageSlot.appendChild(image);
+                reference.appendChild(badge);
+                reference.appendChild(sepLine);
+                articleSlot.appendChild(newsText);
+                articleSlot.appendChild(newsTypeSlot);
+                articleSlot.appendChild(horizontalRule2);
+                articleSlot.appendChild(publisherSlot);
+                publisherSlot.appendChild(publ);
         }
     </script>
 
