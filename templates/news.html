@@ -30,16 +30,16 @@
                 <h1 class="text-center">Stock Observer News</h1>
                 <h2 class="pwrd"> Powered by Yahoo Finance </h2>
             </div>
-            <p class="tm-mb-80 pr-5 text-white" id="descText">
+            <p class="tm-mb-80" id="descText">
                 Stay updated with the latest news and analysis from the stock market. Our news web scraper provides comprehensive coverage of stock performance, market trends, and significant financial events.
         </div>
-        <!-- Back Button -->
-        <a href="{{ url_for('landingpage') }}">
-            <div class="textSlotBackBtn">
-                <i class="bx bx-arrow-from-right bx-sm"></i>
-                Go Back
-            </div>
-        </a>
+            <!-- Back Button -->
+            <a href="{{ url_for('landingpage') }}">
+                <div class="textSlotBackBtn">
+                    <i class="bx bx-arrow-from-right bx-sm"></i>
+                    Go Back
+                </div>
+            </a>
     </header>
 
     <!-- Main -->
@@ -80,9 +80,8 @@
 
                 for(let i = 0; i < infodata.data_len; i++) {
 
-
-                console.log(infodata.data[i].thumbnail)
                 createNewsSlots(infodata.data[i].link, infodata.data[i].title, infodata.data[i].publisher, infodata.data[i].thumbnail, infodata.data[i].type);
+
                 }
             }
         };

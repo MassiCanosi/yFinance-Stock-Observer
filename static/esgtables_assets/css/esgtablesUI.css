@@ -2020,38 +2020,46 @@ input, select, textarea {
         font-style: normal;
     }
 
-
     .headerText{
         align-content: center;
         height: 100%;
     }
 
+	/* SearchBar */
+
     .ticker-slot {
         display: flex;
         justify-content: center;
+		font-size: small;
+		height: 100%;
     }
 
+	.cell-content {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 7%; 
+		gap: 3%;
+	}
+
     #searchbarcontent {
-        background-color: #139c01;
-        height: 100%;
-        padding-top: 20px;
-        padding-bottom: 20px;
+        background-color: #0020f277;
+        padding-top: 4%;
+        padding-bottom: 4%;
     }
 
     .searchbarheader{
         display: flex;
         justify-content: center;
         align-content: center;
-    }
-
-    .anchorstyle {
-        text-decoration: none;
+		color: white;
+		margin-bottom: 2%; 
     }
 
     .scrollinfo {
         display: flex;
         width: 70%;
-        height: 70%;
+        height: 30%;
         border-radius: 12px;
         justify-content: center;
         align-items: center;
@@ -2064,3 +2072,25 @@ input, select, textarea {
         background: #26c9f2;
         text-decoration: none;
     }
+
+	.add-btn {
+		border-style: none;
+		border-radius: 12px;
+		height: 100%;
+		padding: 3% 5% 3% 5%; 
+	}
+	
+	.add-btn:hover {
+		background-color: #4169E1;
+		cursor: pointer;
+	}
+
+	#new-ticker {
+		font-size: medium;
+	}
+
+	#new-ticker:focus {
+        border-color: #4169E1;
+        box-shadow: 0 0 5px rgba(65, 105, 225, 0.5);
+    }
+

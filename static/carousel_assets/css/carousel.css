@@ -38,6 +38,7 @@
 
 .add-btn:hover {
     background-color: #4169E1;
+    cursor: pointer;
 }
 
 .go2MainBtn:hover {

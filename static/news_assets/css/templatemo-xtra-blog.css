@@ -17,22 +17,22 @@ body {
     overflow-x: hidden;
 }
 
-p, span { color: #999; }
+p, span { color: #000000; }
 hr { 
-    border-top-color: #CCC; 
+    border-top-color: #000000; 
     margin-top: 10px;
     /* margin-bottom: 10px; */
 }
-.form-control::-webkit-input-placeholder { color: #999; }  
-.form-control:-ms-input-placeholder { color: #999; }  
-.form-control::placeholder { color: #999; }
+.form-control::-webkit-input-placeholder { color: #000000; }  
+.form-control:-ms-input-placeholder { color: #000000; }  
+.form-control::placeholder { color: #000000; }
 
 .tm-header {
     background-color: #0CC;
     color: white;
     position: fixed;
-    height: 100%;
     width: 400px;
+    height: 100%;
     z-index: 100;
 }
 
@@ -588,8 +588,11 @@ a:hover figcaption { color: #056767; }
 #descText {
     font-size: 12px;
     text-align: justify;
-    margin-left: 15%;
-    margin-top: 15%;
+    align-items: center;
+    color: white;
+    padding-left: 2.5%;
+    padding-right: 2.5%;
+    padding-top: 5%;
 }
 
 .searchSlot {
@@ -601,10 +604,8 @@ a:hover figcaption { color: #056767; }
 
 .textSlotBackBtn {
     display: flex;
-    width: 100%;
     background-color: #048c8c;
     align-items: center;
-    height: 7%;
     padding-left: 5%;
     color: whitesmoke;
 }
@@ -612,3 +613,5 @@ a:hover figcaption { color: #056767; }
     background-color:#059e9e;
     color: whitesmoke;
 }
+
+tm-mb-80 pr-5 
